@@ -1,0 +1,11 @@
+# Node
+node_modules/
+dist/
+*.log
+
+# macOS
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/

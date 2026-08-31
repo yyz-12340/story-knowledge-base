@@ -1,0 +1,61 @@
+/* Hallmark · macrostructure: Editorial Book · tone: paper-reading · anchor hue: 朱砂 */
+
+:root {
+  /* 色板 — 纸本阅读 */
+  --color-paper: oklch(96.8% 0.012 85);
+  --color-paper-2: oklch(94.5% 0.015 82);
+  --color-paper-3: oklch(90% 0.02 78);
+  --color-ink: oklch(24% 0.01 70);
+  --color-ink-2: oklch(45% 0.015 70);
+  --color-ink-3: oklch(62% 0.015 70);
+  --color-accent: oklch(50% 0.15 30);
+  --color-accent-ink: oklch(96% 0.02 40);
+  --color-line: oklch(60% 0.01 75 / 0.28);
+  --color-focus: oklch(50% 0.15 30);
+
+  /* 字体 */
+  --font-display: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC',
+    'Microsoft YaHei', sans-serif;
+
+  /* 间距 — 4pt */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* 字号 */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 20px;
+  --text-xl: 26px;
+  --text-display-s: 34px;
+  --text-display: 44px;
+
+  /* 圆角 / 阴影 / 规则 */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --rule-hairline: 1px solid var(--color-line);
+  --shadow-lift: 0 1px 2px oklch(24% 0.01 70 / 0.06), 0 6px 16px oklch(24% 0.01 70 / 0.08);
+  --measure: 38em;
+
+  /* 动效 */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in: cubic-bezier(0.55, 0.06, 0.68, 0.19);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
