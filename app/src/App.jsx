@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
-import Overview from './views/Overview.jsx';
 import Browse from './views/Browse.jsx';
 import Graph from './views/Graph.jsx';
 import About from './views/About.jsx';
 
 const VIEWS = [
-  { id: 'overview', label: '概览', icon: '◈' },
   { id: 'browse', label: '浏览', icon: '☰' },
   { id: 'graph', label: '图谱', icon: '✧' },
   { id: 'about', label: '关于', icon: '❖' },
 ];
 
 export default function App() {
-  const [view, setView] = useState('overview');
+  const [view, setView] = useState('browse');
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -48,7 +46,6 @@ export default function App() {
           </div>
         ) : (
           <>
-            {view === 'overview' && <Overview data={data} />}
             {view === 'browse' && <Browse data={data} />}
             {view === 'graph' && <Graph data={data} />}
             {view === 'about' && <About data={data} />}
