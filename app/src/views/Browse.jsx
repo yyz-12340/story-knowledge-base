@@ -6,9 +6,11 @@ const PAGE_SIZE = 30;
 export default function Browse({ data }) {
   const authors = useMemo(() => [...new Set(data.map((a) => a.author))], [data]);
   const categories = useMemo(() => [...new Set(data.map((a) => a.category))], [data]);
+  const sources = useMemo(() => [...new Set(data.map((a) => a.source))], [data]);
 
   const [selAuthors, setSelAuthors] = useState(authors);
   const [selCats, setSelCats] = useState([]);
+  const [selSources, setSelSources] = useState([]);
   const [minVotes, setMinVotes] = useState(0);
   const [sortBy, setSortBy] = useState('votes');
   const [query, setQuery] = useState('');
@@ -26,26 +28,24 @@ export default function Browse({ data }) {
     return () => clearTimeout(timerRef.current);
   }, [query]);
 
-  useEffect(() => setLimit(PAGE_SIZE), [selAuthors, selCats, minVotes, sortBy, debounced]);
+  useEffect(() => setLimit(PAGE_SIZE), [selAuthors, selCats, selSources, minVotes, sortBy, debounced]);
 
   const results = useMemo(() => {
     const q = debounced.toLowerCase();
     let list = data.filter((a) => {
       if (selAuthors.length && !selAuthors.includes(a.author)) return false;
       if (selCats.length && !selCats.includes(a.category)) return false;
+      if (selSources.length && !selSources.includes(a.source)) return false;
       if (a.votes < minVotes) return false;
       if (q && !(a.question.toLowerCase().includes(q) || a.excerpt.toLowerCase().includes(q)))
         return false;
       return true;
     });
-    const key =
-      sortBy === 'votes' ? (x) => -x.votes
-      : sortBy === 'comments' ? (x) => -x.comments
-      : sortBy === 'date' ? (x) => -x.date.localeCompare('') : (x) => 0;
     if (sortBy === 'date') list.sort((x, y) => y.date.localeCompare(x.date));
-    else list.sort((x, y) => (key(x) - key(y)));
+    else if (sortBy === 'votes') list.sort((x, y) => y.votes - x.votes);
+    else if (sortBy === 'comments') list.sort((x, y) => y.comments - x.comments);
     return list;
-  }, [data, selAuthors, selCats, minVotes, sortBy, debounced]);
+  }, [data, selAuthors, selCats, selSources, minVotes, sortBy, debounced]);
 
   const toggle = (list, setList, v) =>
     setList(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
@@ -94,6 +94,20 @@ export default function Browse({ data }) {
                 onClick={() => toggle(selCats, setSelCats, c)}
               >
                 {c}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="filter-group">
+          <span>来源</span>
+          <div className="chip-row">
+            {sources.map((s) => (
+              <button
+                key={s}
+                className={'chip' + (selSources.includes(s) ? ' on' : '')}
+                onClick={() => toggle(selSources, setSelSources, s)}
+              >
+                {s === 'zhihu' ? '知乎回答' : '视频文字稿'}
               </button>
             ))}
           </div>
@@ -163,10 +177,19 @@ export default function Browse({ data }) {
             <p className="excerpt">{a.excerpt || '（无摘要）'}</p>
             <div className="result-meta" style={{ margin: 'var(--space-3) 0 0' }}>
               <span className="tag author">{a.author}</span>
+              <span className={'tag' + (a.source === 'youtube' ? ' src-yt' : '')}>
+                {a.source === 'youtube' ? '🎬 文字稿' : '知乎'}
+              </span>
               <span className="tag">{a.category}</span>
-              <span>👍 {fmt(a.votes)}</span>
-              <span>💬 {fmt(a.comments)}</span>
-              <span>⭐ {fmt(a.favorites)}</span>
+              {a.source === 'zhihu' ? (
+                <>
+                  <span>👍 {fmt(a.votes)}</span>
+                  <span>💬 {fmt(a.comments)}</span>
+                  <span>⭐ {fmt(a.favorites)}</span>
+                </>
+              ) : (
+                <span className="tag">📄 {fmt((a.contentLen || 0))} 字</span>
+              )}
               <span>{a.date}</span>
             </div>
           </button>
@@ -189,10 +212,17 @@ export default function Browse({ data }) {
             <h1>{reading.question}</h1>
             <div className="result-meta">
               <span className="tag author">{reading.author}</span>
+              <span className="tag">{reading.source === 'youtube' ? '🎬 视频文字稿' : '知乎回答'}</span>
               <span className="tag">{reading.category}</span>
-              <span>👍 {fmt(reading.votes)} 赞</span>
-              <span>💬 {fmt(reading.comments)} 评论</span>
-              <span>⭐ {fmt(reading.favorites)} 收藏</span>
+              {reading.source === 'zhihu' ? (
+                <>
+                  <span>👍 {fmt(reading.votes)} 赞</span>
+                  <span>💬 {fmt(reading.comments)} 评论</span>
+                  <span>⭐ {fmt(reading.favorites)} 收藏</span>
+                </>
+              ) : (
+                <span>📄 {fmt(reading.contentLen || 0)} 字</span>
+              )}
               <span>{reading.date}</span>
             </div>
             <div className="reader-body">

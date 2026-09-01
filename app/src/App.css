@@ -612,3 +612,9 @@ a {
     height: 60vh;
   }
 }
+
+/* 文字稿标签 */
+.result-meta .tag.src-yt {
+  border-color: color-mix(in oklch, #3a5f7a 50%, var(--color-line));
+  color: #3a5f7a;
+}
