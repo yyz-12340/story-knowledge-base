@@ -28,8 +28,7 @@ export default function App() {
     <div className="app-shell">
       <header className="app-header">
         <div className="app-header-inner">
-          <h1 className="app-title">故事集 <em>·</em> 可视化知识库</h1>
-          <span className="app-subtitle">小约翰 · 林先生 · 唯唯诺诺的梦 · 政经鲁社长</span>
+          <h1 className="app-title">故事集</h1>
         </div>
       </header>
 
@@ -41,8 +40,8 @@ export default function App() {
           </div>
         ) : !data ? (
           <div className="state-box">
-            <div className="big">正在载入知识库…</div>
-            <p>1921 篇内容，请稍候。</p>
+            <div className="big">正在载入…</div>
+            <p>请稍候。</p>
           </div>
         ) : (
           <>
